@@ -62,8 +62,8 @@ const submitFile = async () => {
 <template>
   <main class="flex flex-col w-full h-screen justify-center align-middle p-4 text-center">
     <div class="">
-      <h1 class="text-4xl font-bold">Watchman</h1>
-      <p class="">Controle de Notas Fiscais</p>
+      <h1 class="text-4xl font-bold">Upload nota fiscal</h1>
+     
     </div>
 
     <div class="mt-8 flex flex-col w-full justify-items-center p-2">
