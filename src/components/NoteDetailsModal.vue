@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 animate-fade-in" @click.self="closeModal">
     <div class="bg-white rounded-2xl shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-hidden animate-slide-in flex flex-col">
-      <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-8 py-6 flex justify-between items-center">
+      <div class="bg-gray-900 text-white px-8 py-6 flex justify-between items-center">
         <div class="flex items-center gap-4">
           <div class="bg-white bg-opacity-20 p-2.5 rounded-xl flex items-center justify-center">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +38,7 @@
         <div v-else-if="note">
           <div class="p-8 bg-gradient-to-br from-slate-50 to-slate-100 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0ZM7 4H9V6H7V4ZM9 12H7V8H9V12Z" fill="currentColor"/>
               </svg>
               Informações Principais
@@ -75,7 +75,7 @@
 
           <div class="p-8 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M2 3C2 2.45 2.45 2 3 2H13C13.55 2 14 2.45 14 3V13C14 13.55 13.55 14 13 14H3C2.45 14 2 13.55 2 13V3ZM4 4V12H12V4H4ZM6 6H10V8H6V6Z" fill="currentColor"/>
               </svg>
               Informações Técnicas
@@ -171,7 +171,7 @@
 
           <div v-if="note.emitente" class="p-8 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z" fill="currentColor"/>
               </svg>
               Dados do Emitente
@@ -213,7 +213,7 @@
 
           <div v-if="note.destinatario" class="p-8 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z" fill="currentColor"/>
               </svg>
               Dados do Destinatário
@@ -255,7 +255,7 @@
 
           <div v-if="note.totais" class="p-8 bg-gradient-to-br from-green-50 to-green-100 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M1 3C1 2.45 1.45 2 2 2H14C14.55 2 15 2.45 15 3C15 3.55 14.55 4 14 4H2C1.45 4 1 3.55 1 3ZM3 6C2.45 6 2 6.45 2 7C2 7.55 2.45 8 3 8H13C13.55 8 14 7.55 14 7C14 6.45 13.55 6 13 6H3ZM4 10C3.45 10 3 10.45 3 11C3 11.55 3.45 12 4 12H12C12.55 12 13 11.55 13 11C13 10.45 12.55 10 12 10H4Z" fill="currentColor"/>
               </svg>
               Totais
@@ -292,7 +292,7 @@
 
           <div v-if="note.transporte" class="p-8 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M0 11.5C0 12.33 0.67 13 1.5 13S3 12.33 3 11.5S2.33 10 1.5 10S0 10.67 0 11.5ZM13 11.5C13 12.33 13.67 13 14.5 13S16 12.33 16 11.5S15.33 10 14.5 10S13 10.67 13 11.5ZM1.5 9H14.5C15.33 9 16 8.33 16 7.5V3.5C16 2.67 15.33 2 14.5 2H1.5C0.67 2 0 2.67 0 3.5V7.5C0 8.33 0.67 9 1.5 9Z" fill="currentColor"/>
               </svg>
               Transporte
@@ -397,7 +397,7 @@
 
           <div v-if="note.itens && note.itens.length > 0" class="p-8 border-b border-gray-200">
             <h4 class="flex items-center gap-2.5 mb-6 text-xl font-semibold text-gray-800 pb-3 border-b-2 border-gray-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-indigo-500">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-800">
                 <path d="M2 2H14V4H2V2ZM2 6H14V8H2V6ZM2 10H14V12H2V10ZM2 14H10V16H2V14Z" fill="currentColor"/>
               </svg>
               Itens da Nota ({{ note.itens.length }})

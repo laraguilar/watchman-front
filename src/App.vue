@@ -21,7 +21,7 @@ const toggleSidebar = () => {
         <Sidebar :is-collapsed="isSidebarCollapsed" @toggle-collapse="toggleSidebar" />
       </aside>
 
-      <main class="flex-1 p-5 bg-gray-800 text-gray-200 overflow-y-auto transition-all duration-300">
+      <main class="flex-1 p-5 bg-gray-300 text-gray-200 overflow-y-auto transition-all duration-300">
         <RouterView />
       </main>
     </div>

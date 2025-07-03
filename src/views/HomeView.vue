@@ -101,9 +101,6 @@ const submitFile = async () => {
 
 <template>
   <main class="min-h-screen flex items-center justify-center p-5 bg-gray-50 text-gray-700 rounded-lg shadow-sm  dark:bg-gray-900 dark:text-gray-100">
-    <!-- <div class="p-5 bg-gray-50 text-gray-700 rounded-lg shadow-sm"> -->
-    <!-- <h2 class="text-2xl text-gray-800 mb-6 pb-2 border-b-2 border-gray-200">Upload de Notas Fiscais</h2> -->
-
     <div class="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 space-y-6">
       <h1 class="text-4xl font-extrabold text-center text-gray-800 dark:text-gray-200">Upload de Nota Fiscal</h1>
 

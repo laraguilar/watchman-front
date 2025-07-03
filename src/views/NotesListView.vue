@@ -14,7 +14,7 @@
       </svg>
       Erro ao carregar notas: {{ error.message }}
     </div>
-    <div v-else>
+    <div v-else class="overflow-x-auto">
       <table class="w-full border-collapse mt-5 bg-white rounded-md overflow-hidden shadow">
         <thead class="bg-gray-100 text-gray-600">
           <tr>
