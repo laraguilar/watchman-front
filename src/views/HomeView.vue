@@ -2,6 +2,7 @@
 import TheWelcome from '../components/TheWelcome.vue' // Mantenha se você realmente usa este componente
 import { ref } from 'vue'
 import { uploadInvoiceFile } from '@/services/notaFiscalService'; // Importe o novo serviço
+import { transformXmlToDanfe } from '@/services/xmlToDanfeService';
 
 // Ref para armazenar o arquivo XML selecionado
 const xmlFile = ref<File | null>(null)
@@ -57,6 +58,42 @@ const submitFile = async () => {
     console.error('Erro ao enviar o arquivo:', error);
   }
 }
+
+// Função para enviar o arquivo para a API
+const transformFile = async () => {
+  uploadMessage.value = ''
+  uploadSuccess.value = null
+
+  if (!xmlFile.value) {
+    uploadMessage.value = 'Por favor, selecione um arquivo XML primeiro.'
+    uploadSuccess.value = false
+    return
+  }
+
+  try {
+    const responseData = await transformXmlToDanfe(xmlFile.value);
+
+    // uploadMessage.value = responseData.message || 'Arquivo transformado com sucesso!'
+    uploadSuccess.value = true
+    console.log('Resposta da API:', responseData)
+    
+    xmlFile.value = null
+  } catch (error) {
+    let errorMessage = 'Erro desconhecido ao processar requisição.';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      errorMessage = (error as { message: string }).message;
+    }
+
+    uploadMessage.value = errorMessage;
+    uploadSuccess.value = false;
+    console.error('Erro ao transformar o arquivo:', error);
+  }
+}
+
 </script>
 
 <template>
@@ -90,8 +127,13 @@ const submitFile = async () => {
                        hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
           Enviar
         </button>
+        <button type="button"
+                @click="transformFile"
+                class="mt-4 bg-green-600 p-2 px-6 rounded-lg text-white font-bold
+                       hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+          Transformar
+        </button>
       </form>
-
       <div v-if="uploadMessage"
            :class="{
              'text-green-600': uploadSuccess,
