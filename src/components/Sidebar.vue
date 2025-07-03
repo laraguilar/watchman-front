@@ -1,7 +1,18 @@
 <template>
   <nav class="h-full flex flex-col pt-5 bg-gray-900 text-gray-300">
+    <!-- Close button for mobile -->
+    <div v-if="isMobile" class="flex justify-between items-center px-4 pb-4">
+      <h2 class="text-lg font-semibold text-white">Menu</h2>
+      <button
+        @click="closeMobile"
+        class="p-2 rounded-md hover:bg-gray-700 transition-colors duration-200"
+      >
+        <XMarkIcon class="h-6 w-6 text-gray-400" />
+      </button>
+    </div>
+
     <div class="flex justify-center pb-4">
-      <router-link to="/" class="cursor-pointer">
+      <router-link to="/" class="cursor-pointer" @click="handleRouteClick">
         <img
           src="@/assets/logo.png"
           alt="Logo"
@@ -11,7 +22,8 @@
       </router-link>
     </div>
 
-    <div class="text-right px-2.5 pb-5">
+    <!-- Desktop collapse button -->
+    <div v-if="!isMobile" class="text-right px-2.5 pb-5">
       <button
         @click="toggleSidebar"
         class="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-1.5 rounded-md transition-colors duration-200 hover:bg-white hover:bg-opacity-10 hover:text-white"
@@ -27,16 +39,17 @@
           to="/"
           class="flex items-center py-3 text-gray-300 no-underline transition-all duration-200 whitespace-nowrap overflow-hidden hover:bg-slate-700 hover:text-white"
           :class="{
-            'px-3 justify-center': isCollapsed,
-            'px-5': !isCollapsed,
+            'px-3 justify-center': isCollapsed && !isMobile,
+            'px-5': !isCollapsed || isMobile,
             'bg-blue-600 text-white font-bold': $route.path === '/'
           }"
+          @click="handleRouteClick"
         >
-          <ArrowUpTrayIcon class="h-6 w-6" :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }" />
+          <ArrowUpTrayIcon class="h-6 w-6" :class="{ 'mr-0': isCollapsed && !isMobile, 'mr-3': !isCollapsed || isMobile }" />
           <span
-            v-if="!isCollapsed"
+            v-if="!isCollapsed || isMobile"
             class="transition-all duration-300 w-full"
-            :class="{ 'opacity-0 invisible w-0': isCollapsed }"
+            :class="{ 'opacity-0 invisible w-0': isCollapsed && !isMobile }"
           >
             Carregar Nota fiscal
           </span>
@@ -47,16 +60,17 @@
           to="/notas-fiscais"
           class="flex items-center py-3 text-gray-300 no-underline transition-all duration-200 whitespace-nowrap overflow-hidden hover:bg-slate-700 hover:text-white"
           :class="{
-            'px-3 justify-center': isCollapsed,
-            'px-5': !isCollapsed,
+            'px-3 justify-center': isCollapsed && !isMobile,
+            'px-5': !isCollapsed || isMobile,
             'bg-blue-600 text-white font-bold': $route.path === '/notas-fiscais'
           }"
+          @click="handleRouteClick"
         >
-          <DocumentTextIcon class="h-6 w-6" :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }" />
+          <DocumentTextIcon class="h-6 w-6" :class="{ 'mr-0': isCollapsed && !isMobile, 'mr-3': !isCollapsed || isMobile }" />
           <span
-            v-if="!isCollapsed"
+            v-if="!isCollapsed || isMobile"
             class="transition-all duration-300 w-full"
-            :class="{ 'opacity-0 invisible w-0': isCollapsed }"
+            :class="{ 'opacity-0 invisible w-0': isCollapsed && !isMobile }"
           >
             Listagem de Notas Fiscais
           </span>
@@ -71,7 +85,8 @@ import {
   ArrowUpTrayIcon,
   DocumentTextIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  XMarkIcon
 } from '@heroicons/vue/24/solid'
 
 export default {
@@ -80,10 +95,15 @@ export default {
     ArrowUpTrayIcon,
     DocumentTextIcon,
     ChevronLeftIcon,
-    ChevronRightIcon
+    ChevronRightIcon,
+    XMarkIcon
   },
   props: {
     isCollapsed: {
+      type: Boolean,
+      default: false,
+    },
+    isMobile: {
       type: Boolean,
       default: false,
     },
@@ -91,6 +111,14 @@ export default {
   methods: {
     toggleSidebar() {
       this.$emit('toggle-collapse');
+    },
+    closeMobile() {
+      this.$emit('close-mobile');
+    },
+    handleRouteClick() {
+      if (this.isMobile) {
+        this.closeMobile();
+      }
     },
   },
 };
