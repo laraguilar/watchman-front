@@ -17,7 +17,7 @@ export const uploadInvoiceFile = async (file: File): Promise<UploadResponse> => 
     let response: Response;
 
     try {
-        response = await fetch('http://localhost:8000/nota-fiscal', {
+        response = await fetch('http://localhost:8000/api/nota-fiscal', {
             method: 'POST',
             body: formData,
         });
