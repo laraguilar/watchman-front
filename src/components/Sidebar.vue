@@ -1,29 +1,87 @@
 <template>
-  <nav class="sidebar-nav">
-    <div class="toggle-button-container">
-      <button @click="toggleSidebar" class="sidebar-toggle-button">
-        <i :class="isCollapsed ? 'fas fa-angle-right' : 'fas fa-angle-left'"></i>
-        </button>
+  <nav class="h-full flex flex-col pt-5 bg-gray-900 text-gray-300">
+    <div class="flex justify-center pb-4">
+      <router-link to="/" class="cursor-pointer">
+        <img
+          src="@/assets/logo.png"
+          alt="Logo"
+          class="w-auto brightness-0 invert transition-all duration-300 hover:opacity-80"
+          :class="{ 'h-20': !isCollapsed, 'h-10': isCollapsed }"
+        >
+      </router-link>
     </div>
 
-    <ul class="menu-list">
-      <li class="menu-item">
-        <router-link to="/" class="menu-link" :class="{ 'collapsed-link': isCollapsed }">
-          <i class="fas fa-home menu-icon"></i> <span v-if="!isCollapsed" class="menu-text">Carregar Nota fiscal</span>
+    <div class="text-right px-2.5 pb-5">
+      <button
+        @click="toggleSidebar"
+        class="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-1.5 rounded-md transition-colors duration-200 hover:bg-white hover:bg-opacity-10 hover:text-white"
+      >
+        <ChevronRightIcon v-if="isCollapsed" class="h-6 w-6" />
+        <ChevronLeftIcon v-else class="h-6 w-6" />
+      </button>
+    </div>
+
+    <ul class="list-none p-0 m-0">
+      <li class="mb-1">
+        <router-link
+          to="/"
+          class="flex items-center py-3 text-gray-300 no-underline transition-all duration-200 whitespace-nowrap overflow-hidden hover:bg-slate-700 hover:text-white"
+          :class="{
+            'px-3 justify-center': isCollapsed,
+            'px-5': !isCollapsed,
+            'bg-blue-600 text-white font-bold': $route.path === '/'
+          }"
+        >
+          <ArrowUpTrayIcon class="h-6 w-6" :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }" />
+          <span
+            v-if="!isCollapsed"
+            class="transition-all duration-300 w-full"
+            :class="{ 'opacity-0 invisible w-0': isCollapsed }"
+          >
+            Carregar Nota fiscal
+          </span>
         </router-link>
       </li>
-      <li class="menu-item">
-        <router-link to="/notas-fiscais" class="menu-link" :class="{ 'collapsed-link': isCollapsed }">
-          <i class="fas fa-list-alt menu-icon"></i> <span v-if="!isCollapsed" class="menu-text">Listagem de Notas Fiscais</span>
+      <li class="mb-1">
+        <router-link
+          to="/notas-fiscais"
+          class="flex items-center py-3 text-gray-300 no-underline transition-all duration-200 whitespace-nowrap overflow-hidden hover:bg-slate-700 hover:text-white"
+          :class="{
+            'px-3 justify-center': isCollapsed,
+            'px-5': !isCollapsed,
+            'bg-blue-600 text-white font-bold': $route.path === '/notas-fiscais'
+          }"
+        >
+          <DocumentTextIcon class="h-6 w-6" :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }" />
+          <span
+            v-if="!isCollapsed"
+            class="transition-all duration-300 w-full"
+            :class="{ 'opacity-0 invisible w-0': isCollapsed }"
+          >
+            Listagem de Notas Fiscais
+          </span>
         </router-link>
       </li>
     </ul>
   </nav>
 </template>
 
-<script>
+<script lang="ts">
+import {
+  ArrowUpTrayIcon,
+  DocumentTextIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/vue/24/solid'
+
 export default {
-  name: 'Sidebar',
+  name: 'SidebarNav',
+  components: {
+    ArrowUpTrayIcon,
+    DocumentTextIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon
+  },
   props: {
     isCollapsed: {
       type: Boolean,
@@ -32,98 +90,8 @@ export default {
   },
   methods: {
     toggleSidebar() {
-      this.$emit('toggle-collapse'); 
+      this.$emit('toggle-collapse');
     },
   },
 };
 </script>
-
-<style scoped>
-.sidebar-nav {
-  height: 100%; /* Ocupa a altura total do aside */
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px; 
-  background-color: #1a1a1a; 
-  color: #e0e0e0; 
-}
-
-.toggle-button-container {
-  text-align: right;
-  padding: 0 10px 20px 0; 
-}
-
-.sidebar-toggle-button {
-  background: none;
-  border: none;
-  color: #a0a0a0; 
-  font-size: 1.5em;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 5px;
-  transition: background-color 0.2s;
-}
-
-.sidebar-toggle-button:hover {
-  background-color: rgba(255, 255, 255, 0.08); 
-  color: #ffffff; 
-}
-
-.menu-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu-item {
-  margin-bottom: 5px;
-}
-
-.menu-link {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  color: #e0e0e0; 
-  text-decoration: none;
-  transition: background-color 0.2s, padding 0.3s ease, color 0.2s ease;
-  white-space: nowrap; 
-  overflow: hidden; 
-}
-
-.menu-link:hover {
-  background-color: #2c3e50; 
-  color: #ffffff; 
-}
-
-.menu-link.router-link-exact-active {
-  background-color: #007bff; 
-  color: #ffffff; 
-  font-weight: bold;
-}
-
-.menu-icon {
-  margin-right: 15px; 
-  font-size: 1.2em;
-  width: 25px; 
-  text-align: center;
-}
-
-.menu-text {
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.collapsed-link {
-  justify-content: center; 
-  padding: 12px 0px; 
-}
-
-.collapsed-link .menu-icon {
-  margin-right: 0; 
-}
-
-.collapsed-link .menu-text {
-  opacity: 0;
-  visibility: hidden;
-  width: 0;
-}
-</style>

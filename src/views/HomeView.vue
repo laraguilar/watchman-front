@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue' // Mantenha se você realmente usa este componente
 import { ref } from 'vue'
 import { uploadInvoiceFile } from '@/services/notaFiscalService'; // Importe o novo serviço
 
@@ -7,12 +6,16 @@ import { uploadInvoiceFile } from '@/services/notaFiscalService'; // Importe o n
 const xmlFile = ref<File | null>(null)
 const uploadMessage = ref<string>('') // Adiciona uma ref para mensagens de upload
 const uploadSuccess = ref<boolean | null>(null) // Adiciona uma ref para status de sucesso/erro
+const isDragOver = ref<boolean>(false) // Estado para controlar o visual durante drag over
 
-// Função para lidar com a seleção do arquivo
-const handleFileUpload = (event: Event) => {
-  const fileInput = event.target as HTMLInputElement
-  if (fileInput.files && fileInput.files[0]) {
-    xmlFile.value = fileInput.files[0]
+// Função para processar o arquivo selecionado
+const processFile = (file: File) => {
+  // Limpar mensagens anteriores
+  uploadMessage.value = ''
+  uploadSuccess.value = null
+
+  if (file && file.type === 'text/xml' || file.name.endsWith('.xml')) {
+    xmlFile.value = file
     // Opcional: Ler o conteúdo do arquivo no frontend para debug ou pré-visualização
     const reader = new FileReader()
     reader.onload = () => {
@@ -20,6 +23,38 @@ const handleFileUpload = (event: Event) => {
       console.log('Conteúdo do XML:', xmlContent)
     }
     reader.readAsText(xmlFile.value)
+  } else {
+    uploadMessage.value = 'Por favor, selecione apenas arquivos XML.'
+    uploadSuccess.value = false
+  }
+}
+
+// Função para lidar com a seleção do arquivo
+const handleFileUpload = (event: Event) => {
+  const fileInput = event.target as HTMLInputElement
+  if (fileInput.files && fileInput.files[0]) {
+    processFile(fileInput.files[0])
+  }
+}
+
+// Funções para drag and drop
+const handleDragOver = (event: DragEvent) => {
+  event.preventDefault()
+  isDragOver.value = true
+}
+
+const handleDragLeave = (event: DragEvent) => {
+  event.preventDefault()
+  isDragOver.value = false
+}
+
+const handleDrop = (event: DragEvent) => {
+  event.preventDefault()
+  isDragOver.value = false
+
+  const files = event.dataTransfer?.files
+  if (files && files.length > 0) {
+    processFile(files[0])
   }
 }
 
@@ -40,8 +75,13 @@ const submitFile = async () => {
     uploadMessage.value = responseData.message || 'Arquivo enviado com sucesso!'
     uploadSuccess.value = true
     console.log('Resposta da API:', responseData)
-    
+
+    // Limpar o arquivo selecionado e o input
     xmlFile.value = null
+    const fileInput = document.getElementById('fileinput') as HTMLInputElement
+    if (fileInput) {
+      fileInput.value = ''
+    }
   } catch (error) {
     let errorMessage = 'Erro desconhecido ao processar requisição.';
     if (error instanceof Error) {
@@ -60,50 +100,96 @@ const submitFile = async () => {
 </script>
 
 <template>
-  <main class="flex flex-col w-full h-screen justify-center align-middle p-4 text-center">
-    <div class="">
-      <h1 class="text-4xl font-bold">Upload nota fiscal</h1>
-     
-    </div>
+  <main class="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 space-y-6">
+      <h1 class="text-4xl font-extrabold text-center text-gray-800 dark:text-gray-200">Upload de Nota Fiscal</h1>
 
-    <div class="mt-8 flex flex-col w-full justify-items-center p-2">
-      <form @submit.prevent="submitFile" class="">
-        <label for="fileinput" class="block text-lg font-medium text-gray-700 mb-2">Selecione a NF em XML</label>
-        <div class="w-full my-2 flex justify-center">
-          <input
-            type="file"
-            id="fileinput"
-            accept=".xml"
-            @change="handleFileUpload"
-            class="block w-full max-w-sm text-sm text-gray-500
-                   file:mr-4 file:py-2 file:px-4
-                   file:rounded-full file:border-0
-                   file:text-sm file:font-semibold
-                   file:bg-violet-50 file:text-violet-700
-                   hover:file:bg-violet-100"
-          />
+      <form @submit.prevent="submitFile" class="space-y-6">
+        <div>
+          <label for="fileinput" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Selecione a NF em XML
+          </label>
+
+          <!-- Área de drag and drop -->
+          <div
+            @dragover="handleDragOver"
+            @dragleave="handleDragLeave"
+            @drop="handleDrop"
+            :class="{
+              'border-blue-400 bg-blue-50 dark:bg-blue-900/20': isDragOver,
+              'border-gray-300 dark:border-gray-600': !isDragOver
+            }"
+            class="relative border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200 hover:border-gray-400 dark:hover:border-gray-500"
+          >
+            <input
+              type="file"
+              id="fileinput"
+              accept=".xml"
+              @change="handleFileUpload"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+
+            <div class="space-y-3">
+              <!-- Ícone de upload -->
+              <div class="mx-auto w-12 h-12 text-gray-400 dark:text-gray-500">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+              </div>
+
+              <!-- Texto principal -->
+              <div v-if="!xmlFile">
+                <p class="text-lg font-medium text-gray-700 dark:text-gray-300">
+                  Arraste e solte seu arquivo aqui
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  ou clique para selecionar
+                </p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                  Apenas arquivos XML são aceitos
+                </p>
+              </div>
+
+              <!-- Arquivo selecionado -->
+              <div v-else class="space-y-2">
+                <p class="text-sm text-green-600 dark:text-green-400 font-medium">
+                  ✓ Arquivo selecionado
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ xmlFile.name }}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  Clique aqui para selecionar outro arquivo
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <p v-if="xmlFile" class="text-sm text-gray-600 mt-2">Arquivo selecionado: <span class="font-semibold">{{ xmlFile.name }}</span></p>
-        
+
         <button type="submit"
-                class="mt-4 bg-green-600 p-2 px-6 rounded-lg text-white font-bold
-                       hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-          Enviar
+                :disabled="!xmlFile"
+                :class="{
+                  'bg-green-600 hover:bg-green-700 focus:ring-green-500 dark:bg-green-700 dark:hover:bg-green-600 cursor-pointer': xmlFile,
+                  'bg-gray-400 cursor-not-allowed dark:bg-gray-600': !xmlFile
+                }"
+                class="w-full py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white
+                       focus:outline-none focus:ring-2 focus:ring-offset-2
+                       dark:focus:ring-offset-gray-800 transition-colors duration-200">
+          Enviar XML
         </button>
       </form>
 
       <div v-if="uploadMessage"
            :class="{
-             'text-green-600': uploadSuccess,
-             'text-red-600': uploadSuccess === false,
-             'p-3 mt-4 rounded-md': true,
-             'bg-green-100 border border-green-400': uploadSuccess,
-             'bg-red-100 border border-red-400': uploadSuccess === false
+             'bg-green-100 border-green-400 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300': uploadSuccess,
+             'bg-red-100 border-red-400 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-300': uploadSuccess === false,
+             'p-4 rounded-md flex items-center space-x-3': true
            }"
-           class="mt-4 max-w-sm mx-auto">
-        {{ uploadMessage }}
+           class="mt-4">
+           <svg v-if="uploadSuccess" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+           <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <p class="font-medium">{{ uploadMessage }}</p>
       </div>
     </div>
-    
-    </main>
+  </main>
 </template>
