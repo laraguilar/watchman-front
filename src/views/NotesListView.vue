@@ -52,7 +52,7 @@
 <script lang="ts">
 // ... seu script Vue (sem alterações aqui, já que são apenas estilos)
 import NoteDetailsModal from '@/components/NoteDetailsModal.vue';
-import axios from 'axios';
+import { ApiNotaFiscalRepository, type NotaFiscalItem } from '@/repositories/NotaFiscalRepository';
 
 export default {
   name: 'NotesListView',
@@ -61,7 +61,7 @@ export default {
   },
   data() {
     return {
-      notes: [],
+      notes: [] as NotaFiscalItem[],
       isModalOpen: false,
       selectedChaveAcesso: null,
       loading: true,
@@ -73,8 +73,9 @@ export default {
       this.loading = true;
       this.error = null;
       try {
-        const response = await axios.get('http://localhost:8000/api/notas-fiscais');
-        this.notes = response.data;
+        // Usando o repositório para buscar as notas fiscais
+        const repository = new ApiNotaFiscalRepository();
+        this.notes = await repository.getAll();
       } catch (err) {
         console.error("Erro ao buscar notas fiscais:", err);
         this.error = err;
@@ -82,7 +83,7 @@ export default {
         this.loading = false;
       }
     },
-    openModal(chaveAcesso) {
+    openModal(chaveAcesso: string | null) {
       this.selectedChaveAcesso = chaveAcesso;
       this.isModalOpen = true;
     },

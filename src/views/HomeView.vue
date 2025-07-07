@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { uploadInvoiceFile } from '@/services/notaFiscalService'; // Importe o novo serviço
+import { ApiNotaFiscalRepository } from '@/repositories/NotaFiscalRepository';
 
 // Ref para armazenar o arquivo XML selecionado
 const xmlFile = ref<File | null>(null)
@@ -70,7 +70,9 @@ const submitFile = async () => {
   }
 
   try {
-    const responseData = await uploadInvoiceFile(xmlFile.value);
+    // const responseData = await uploadInvoiceFile(xmlFile.value);
+    const repository = new ApiNotaFiscalRepository();
+    const responseData = await repository.upload(xmlFile.value);
 
     uploadMessage.value = responseData.message || 'Arquivo enviado com sucesso!'
     uploadSuccess.value = true

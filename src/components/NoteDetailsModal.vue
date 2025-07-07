@@ -314,7 +314,7 @@
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-500">CNPJ/CPF</label>
-                    <span class="text-sm text-gray-800 font-mono">{{ formatDocument(note.transporte.transportadora.documento) }}</span>
+                    <span class="text-sm text-gray-800 font-mono">{{ formatDocument(note.transporte.transportadora.cnpj || note.transporte.transportadora.cpf) }}</span>
                   </div>
                 </div>
 
@@ -462,199 +462,7 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
-
-// --- Interfaces Atualizadas ---
-
-interface Pessoa {
-  id: number;
-  nome: string;
-  documento?: string; // Pode ser CPF ou CNPJ
-  cnpj?: string;
-  cpf?: string;
-  cnae?: string | null;
-  data_atualizacao: string;
-  data_criacao: string;
-  email?: string | null;
-  id_estrangeiro?: string | null;
-  inscricao_estadual?: string | null;
-  inscricao_municipal?: string | null;
-  inscricao_suframa?: string | null;
-  nome_fantasia?: string | null;
-  regime_tributario?: number | null;
-  tipo_pessoa: string;
-}
-
-interface Endereco {
-  id: number;
-  logradouro: string;
-  numero: string;
-  bairro: string;
-  codigo_municipio: string; // Pode ser string
-  municipio: string;
-  uf: string;
-  cep: string;
-  cnpj?: string | null;
-  cpf?: string | null;
-  codigo_pais?: string | null;
-  complemento?: string | null;
-  data_atualizacao: string;
-  data_criacao: string;
-  nfe_id?: number | null;
-  pais?: string | null;
-  pessoa_id?: number;
-  telefone?: string | null;
-  tipo_endereco: string;
-}
-
-interface Imposto {
-  id: number;
-  tipo_imposto: string;
-  valor: number | null; // Pode ser null
-  aliquota_percentual: number | null; // Alíquota agora é percentual e pode ser null
-  aliquota_st?: number | null;
-  aliquota_valor?: number | null;
-  classe_enquadramento?: string | null;
-  cnpj_produtor?: string | null;
-  codigo_enquadramento?: string | null;
-  codigo_selo?: string | null;
-  csosn?: string | null;
-  cst?: string | null;
-  data_atualizacao: string;
-  data_criacao: string;
-  item_nfe_id: number;
-  modalidade_base_calculo?: number | null;
-  modalidade_base_calculo_st?: number | null;
-  origem?: number | null;
-  percentual_credito_sn?: number | null;
-  percentual_margem_valor_adicionado_st?: number | null;
-  percentual_reducao_base_calculo?: number | null;
-  percentual_reducao_base_calculo_st?: number | null;
-  quantidade_selo?: number | null;
-  quantidade_unidade?: number | null;
-  tipo_calculo?: string | null;
-  valor_base_calculo?: number | null;
-  valor_base_calculo_st?: number | null;
-  valor_credito_sn?: number | null;
-  valor_st?: number | null;
-  valor_unidade?: number | null;
-}
-
-interface Item {
-  id: number;
-  numero_item: number;
-  codigo_produto: string;
-  descricao: string;
-  quantidade_comercial: number; // Nova propriedade
-  valor_unitario_comercial: number; // Nova propriedade
-  valor_total_bruto: number; // Nova propriedade, substitui valor_total
-  impostos?: Imposto[];
-  cfop: string;
-  data_atualizacao: string;
-  data_criacao: string;
-  gtin: string;
-  gtin_tributavel: string;
-  ncm: string;
-  nfe_id: number;
-  origem_mercadoria: number;
-  quantidade_tributavel: number;
-  unidade_comercial: string;
-  unidade_tributavel: string;
-  valor_unitario_tributavel: number;
-}
-
-interface Totais {
-  id: number;
-  nfe_id: number;
-  valor_produtos: number; // Substitui valor_total_produtos
-  valor_icms: number; // Impostos detalhados
-  valor_cofins: number;
-  valor_pis: number;
-  valor_total_nfe: number;
-  base_calculo_icms: number;
-  base_calculo_icms_st: number;
-  data_atualizacao: string;
-  data_criacao: string;
-  valor_desconto: number;
-  valor_frete: number;
-  valor_icms_st: number;
-  valor_ii: number;
-  valor_ipi: number;
-  valor_outros: number;
-  valor_seguro: number;
-}
-
-interface Lacre {
-  numero_lacre: string;
-}
-
-interface Volume {
-  quantidade: number;
-  especie: string;
-  peso_liquido: number;
-  peso_bruto: number;
-  lacres?: Lacre[];
-}
-
-interface Veiculo {
-  placa: string;
-  uf: string;
-  rntc: string | null;
-}
-
-interface Transporte {
-  id: number;
-  nfe_id: number;
-  modalidade_frete: number; // Agora é um número
-  transportadora?: Pessoa;
-  transportadora_endereco?: Endereco;
-  volumes?: Volume[];
-  veiculos?: Veiculo[];
-  data_atualizacao: string;
-  data_criacao: string;
-  transportadora_id: number | null;
-}
-
-interface InformacoesAdicionais {
-  id: number;
-  nfe_id: number;
-  info_fisco: string | null; // Mudou de informacoes_fisco para info_fisco
-  info_contribuinte: string | null; // Mudou de informacoes_contribuinte para info_contribuinte
-  data_atualizacao: string;
-  data_criacao: string;
-}
-
-interface NotaFiscal {
-  id: number;
-  chave_acesso: string;
-  versao: string;
-  codigo_uf: number;
-  codigo_nf: string;
-  natureza_operacao: string;
-  indicador_pagamento: number;
-  modelo: number; // Agora é um número
-  serie: number; // Agora é um número
-  numero: number; // Agora é um número
-  data_emissao: string;
-  data_saida_entrada: string | null;
-  tipo_nf: number; // Agora é um número
-  codigo_municipio_fato_gerador: string; // Pode ser string
-  tipo_impressao: number; // Agora é um número
-  tipo_emissao: number; // Agora é um número
-  digito_verificador: number; // Agora é um número
-  ambiente: number; // Agora é um número
-  finalidade_nf: number; // Agora é um número
-  processo_emissao: number; // Agora é um número
-  versao_processo: string;
-  emitente?: Pessoa;
-  emitente_endereco?: Endereco;
-  destinatario?: Pessoa;
-  destinatario_endereco?: Endereco;
-  itens?: Item[];
-  totais?: Totais;
-  transporte?: Transporte;
-  informacoes_adicionais?: InformacoesAdicionais;
-}
+import { ApiNotaFiscalRepository, type NotaFiscal } from '@/repositories/NotaFiscalRepository';
 
 export default {
   name: 'NoteDetailsModal',
@@ -696,9 +504,8 @@ export default {
       this.error = null;
       this.note = null;
       try {
-        const response = await axios.get(`http://localhost:8000/api/nota-fiscal/${chaveAcesso}`);
-        console.log(response.data)
-        this.note = response.data;
+        const repository = new ApiNotaFiscalRepository();
+        this.note = await repository.getById(chaveAcesso);
       } catch (err) {
         console.error("Erro ao buscar detalhes da nota fiscal:", err);
         this.error = err as Error;
@@ -713,7 +520,7 @@ export default {
     formatDate(dateString: string | null) {
       if (!dateString) return 'N/A';
       try {
-        const date = new Date(dateString);
+        // const date = new Date(dateString);
         // Considerando o fuso horário local, que é GMT-3 em Serra/ES
         // Para garantir que a data seja formatada corretamente sem ajuste de fuso horário indesejado,
         // é melhor construir a data manualmente ou garantir que a string ISO esteja no UTC correto.
