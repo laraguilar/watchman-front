@@ -31,7 +31,7 @@
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.numero }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.serie }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.chave_acesso }}</td>
-            <td class="border border-gray-200 py-3 px-4 text-left">{{ note.data_emissao }}</td>
+            <td class="border border-gray-200 py-3 px-4 text-left">{{ dateFormatter.format(note.data_emissao) }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.natureza_operacao }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">
               <button @click="openModal(note.id)" class="bg-blue-500 text-white border-none py-2 px-4 rounded cursor-pointer text-sm transition-colors duration-200 ease-in-out transform hover:bg-blue-700 hover:-translate-y-px active:bg-blue-800 active:translate-y-0">Visualizar</button>
@@ -52,6 +52,7 @@
 <script lang="ts">
 // ... seu script Vue (sem alterações aqui, já que são apenas estilos)
 import NoteDetailsModal from '@/components/NoteDetailsModal.vue';
+import { FormatterFactory } from '@/factory/FormatterFactory';
 import { ApiNotaFiscalRepository, type NotaFiscalItem } from '@/repositories/NotaFiscalRepository';
 
 export default {
@@ -65,7 +66,8 @@ export default {
       isModalOpen: false,
       selectedChaveAcesso: null,
       loading: true,
-      error: null
+      error: null,
+      dateFormatter: FormatterFactory.createDateFormatter(),
     };
   },
   methods: {

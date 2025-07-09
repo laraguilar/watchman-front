@@ -463,6 +463,7 @@
 
 <script lang="ts">
 import { ApiNotaFiscalRepository, type NotaFiscal } from '@/repositories/NotaFiscalRepository';
+import { FormatterFactory } from '@/factory/FormatterFactory';
 
 export default {
   name: 'NoteDetailsModal',
@@ -480,7 +481,11 @@ export default {
     return {
       note: null as NotaFiscal | null,
       loading: false,
-      error: null as Error | null
+      error: null as Error | null,
+      currencyFormatter: FormatterFactory.createCurrencyFormatter(),
+      documentFormatter: FormatterFactory.createDocumentFormatter(),
+      dateFormatter: FormatterFactory.createDateFormatter(),
+      CEPFormatter: FormatterFactory.createCEPFormatter()
     };
   },
   watch: {
@@ -520,71 +525,19 @@ export default {
     formatDate(dateString: string | null) {
       if (!dateString) return 'N/A';
       try {
-        // const date = new Date(dateString);
-        // Considerando o fuso horário local, que é GMT-3 em Serra/ES
-        // Para garantir que a data seja formatada corretamente sem ajuste de fuso horário indesejado,
-        // é melhor construir a data manualmente ou garantir que a string ISO esteja no UTC correto.
-        // Já que a data_emissao é 'YYYY-MM-DD', a conversão direta para Date pode resultar em um dia anterior se for considerado UTC.
-        // Para exibir a data como ela vem, podemos usar um split e reconstruir.
-
-        const parts = dateString.split('-');
-        const year = parseInt(parts[0]);
-        const month = parseInt(parts[1]) - 1; // Mês é zero-indexed
-        const day = parseInt(parts[2]);
-
-        const localDate = new Date(year, month, day);
-
-        return localDate.toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        });
+        return this.dateFormatter.format(dateString);
       } catch {
         return dateString;
       }
     },
     formatCurrency(value: string | number | null) {
-      if (value === null || value === undefined) return 'N/A';
-      try {
-        const numValue = typeof value === 'string' ? parseFloat(value) : value;
-        return new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(numValue);
-      } catch {
-        return value;
-      }
+      return this.currencyFormatter.format(value);
     },
     formatDocument(document: string | null | undefined) {
-      if (!document) return 'N/A';
-
-      // Remove caracteres não numéricos
-      const cleaned = String(document).replace(/\D/g, '');
-
-      // Formata CNPJ (14 dígitos)
-      if (cleaned.length === 14) {
-        return cleaned.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-      }
-
-      // Formata CPF (11 dígitos)
-      if (cleaned.length === 11) {
-        return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-      }
-
-      return document;
+      return this.documentFormatter.format(document);
     },
     formatCEP(cep: string | null | undefined) {
-      if (!cep) return 'N/A';
-
-      // Remove caracteres não numéricos
-      const cleaned = String(cep).replace(/\D/g, '');
-
-      // Formata CEP (8 dígitos)
-      if (cleaned.length === 8) {
-        return cleaned.replace(/(\d{5})(\d{3})/, '$1-$2');
-      }
-
-      return cep;
+      return this.CEPFormatter.format(cep);
     },
     formatModalidadeFrete(modalidade: number | null) {
       if (modalidade === null || modalidade === undefined) return 'N/A';
