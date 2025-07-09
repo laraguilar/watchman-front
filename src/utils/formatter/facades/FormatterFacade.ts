@@ -1,4 +1,4 @@
-import { FormatterFactory } from '@/factory/FormatterFactory'
+import { FormatterFactory } from '../factories/FormatterFactory'
 
 export class FormatterFacade {
   private currencyFormatter = FormatterFactory.createCurrencyFormatter()

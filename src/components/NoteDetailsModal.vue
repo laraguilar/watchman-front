@@ -463,7 +463,7 @@
 
 <script lang="ts">
 import { ApiNotaFiscalRepository, type NotaFiscal } from '@/repositories/NotaFiscalRepository';
-import { FormatterFacade } from '@/facade/FormatterFacade';
+import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
 
 export default {
   name: 'NoteDetailsModal',

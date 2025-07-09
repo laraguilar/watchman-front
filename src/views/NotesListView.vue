@@ -52,7 +52,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import NoteDetailsModal from '@/components/NoteDetailsModal.vue';
-import { FormatterFacade } from '@/facade/FormatterFacade';
+import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
 import { ApiNotaFiscalRepository, type NotaFiscalItem } from '@/repositories/NotaFiscalRepository';
 
 export default defineComponent({
