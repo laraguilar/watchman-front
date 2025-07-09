@@ -58,7 +58,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data de Emissão</label>
-                <span class="text-base text-gray-800 font-medium">{{ formatDate(note.data_emissao) }}</span>
+                <span class="text-base text-gray-800 font-medium">{{ formatter.formatDate(note.data_emissao) }}</span>
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Natureza da Operação</label>
@@ -95,7 +95,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data Saída/Entrada</label>
-                <span class="text-base text-gray-800 font-medium">{{ note.data_saida_entrada ? formatDate(note.data_saida_entrada) : 'N/A' }}</span>
+                <span class="text-base text-gray-800 font-medium">{{ note.data_saida_entrada ? formatter.formatDate(note.data_saida_entrada) : 'N/A' }}</span>
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Dígito Verificador</label>
@@ -183,7 +183,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">CNPJ/CPF</label>
-                <span class="text-base text-gray-800 font-medium font-mono">{{ formatDocument(note.emitente.cnpj || note.emitente.cpf) }}</span>
+                <span class="text-base text-gray-800 font-medium font-mono">{{ formatter.formatDocument(note.emitente.cnpj || note.emitente.cpf) }}</span>
               </div>
               <div v-if="note.emitente_endereco" class="col-span-full">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3 block">Endereço</label>
@@ -203,7 +203,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                       <label class="text-xs font-medium text-gray-500">CEP</label>
-                      <span class="text-sm text-gray-800 font-mono">{{ formatCEP(note.emitente_endereco.cep) }}</span>
+                      <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCEP(note.emitente_endereco.cep) }}</span>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">CNPJ/CPF</label>
-                <span class="text-base text-gray-800 font-medium font-mono">{{ formatDocument(note.destinatario.cnpj || note.destinatario.cpf) }}</span>
+                <span class="text-base text-gray-800 font-medium font-mono">{{ formatter.formatDocument(note.destinatario.cnpj || note.destinatario.cpf) }}</span>
               </div>
               <div v-if="note.destinatario_endereco" class="col-span-full">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3 block">Endereço</label>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                       <label class="text-xs font-medium text-gray-500">CEP</label>
-                      <span class="text-sm text-gray-800 font-mono">{{ formatCEP(note.destinatario_endereco.cep) }}</span>
+                      <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCEP(note.destinatario_endereco.cep) }}</span>
                     </div>
                   </div>
                 </div>
@@ -264,26 +264,26 @@
               <div class="bg-white rounded-xl p-6 border-2 border-green-500 shadow-lg shadow-green-500/10">
                 <div class="flex justify-between items-center">
                   <label class="text-lg font-semibold text-green-800">Valor Total da NF-e</label>
-                  <span class="text-3xl font-bold text-green-600 font-mono">{{ formatCurrency(note.totais.valor_total_nfe) }}</span>
+                  <span class="text-3xl font-bold text-green-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_total_nfe) }}</span>
                 </div>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="bg-white rounded-xl p-5 border-2 border-blue-300 shadow-md">
                   <div class="flex justify-between items-center">
                     <label class="text-base font-semibold text-blue-800">Valor Total dos Produtos</label>
-                    <span class="text-xl font-bold text-blue-600 font-mono">{{ formatCurrency(note.totais.valor_produtos) }}</span>
+                    <span class="text-xl font-bold text-blue-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_produtos) }}</span>
                   </div>
                 </div>
                 <div class="bg-white rounded-xl p-5 border-2 border-orange-300 shadow-md">
                   <div class="flex justify-between items-center">
                     <label class="text-base font-semibold text-orange-800">Valor Total dos Impostos</label>
-                    <span class="text-xl font-bold text-orange-600 font-mono">{{ formatCurrency(note.totais.valor_icms + note.totais.valor_cofins + note.totais.valor_pis) }}</span>
+                    <span class="text-xl font-bold text-orange-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_icms + note.totais.valor_cofins + note.totais.valor_pis) }}</span>
                   </div>
                 </div>
                 <div class="bg-white rounded-xl p-5 border-2 border-red-300 shadow-md">
                   <div class="flex justify-between items-center">
                     <label class="text-base font-semibold text-red-800">Valor Total dos Descontos</label>
-                    <span class="text-xl font-bold text-red-600 font-mono">{{ formatCurrency(note.totais.valor_desconto) }}</span>
+                    <span class="text-xl font-bold text-red-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_desconto) }}</span>
                   </div>
                 </div>
               </div>
@@ -301,7 +301,7 @@
               <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
                 <div class="flex flex-col gap-1.5">
                   <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Modalidade Frete</label>
-                  <span class="text-base text-gray-800 font-medium">{{ formatModalidadeFrete(note.transporte.modalidade_frete) || 'N/A' }}</span>
+                  <span class="text-base text-gray-800 font-medium">{{ formatter.formatModalidadeFrete(note.transporte.modalidade_frete) || 'N/A' }}</span>
                 </div>
               </div>
 
@@ -314,7 +314,7 @@
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-500">CNPJ/CPF</label>
-                    <span class="text-sm text-gray-800 font-mono">{{ formatDocument(note.transporte.transportadora.cnpj || note.transporte.transportadora.cpf) }}</span>
+                    <span class="text-sm text-gray-800 font-mono">{{ formatter.formatDocument(note.transporte.transportadora.cnpj || note.transporte.transportadora.cpf) }}</span>
                   </div>
                 </div>
 
@@ -407,7 +407,7 @@
                 <div class="bg-slate-50 px-5 py-4 border-b border-gray-300">
                   <div class="flex justify-between items-center">
                     <span class="font-semibold text-gray-700 text-sm">Item {{ item.numero_item }}</span>
-                    <span class="text-lg font-bold text-indigo-600 font-mono">{{ formatCurrency(item.valor_total_bruto) }}</span>
+                    <span class="text-lg font-bold text-indigo-600 font-mono">{{ formatter.formatCurrency(item.valor_total_bruto) }}</span>
                   </div>
                 </div>
                 <div class="px-5 py-4">
@@ -426,7 +426,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                       <label class="text-xs font-medium text-gray-500">Valor Unitário</label>
-                      <span class="text-sm text-gray-800 font-mono">{{ formatCurrency(item.valor_unitario_comercial) }}</span>
+                      <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCurrency(item.valor_unitario_comercial) }}</span>
                     </div>
                   </div>
 
@@ -436,7 +436,7 @@
                       <div v-for="imposto in item.impostos" :key="imposto.id" class="bg-slate-50 p-3 rounded-lg border border-gray-200">
                         <div class="text-xs font-medium text-gray-500 mb-1">{{ imposto.tipo_imposto }}</div>
                         <div class="flex justify-between items-center">
-                          <span class="text-sm text-gray-800 font-mono">{{ formatCurrency(imposto.valor) }}</span>
+                          <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCurrency(imposto.valor) }}</span>
                           <span v-if="imposto.aliquota_percentual" class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-md">{{ imposto.aliquota_percentual }}%</span>
                           <span v-else class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-md">N/A</span>
                         </div>
@@ -463,7 +463,7 @@
 
 <script lang="ts">
 import { ApiNotaFiscalRepository, type NotaFiscal } from '@/repositories/NotaFiscalRepository';
-import { FormatterFactory } from '@/factory/FormatterFactory';
+import { FormatterFacade } from '@/facade/FormatterFacade';
 
 export default {
   name: 'NoteDetailsModal',
@@ -482,10 +482,7 @@ export default {
       note: null as NotaFiscal | null,
       loading: false,
       error: null as Error | null,
-      currencyFormatter: FormatterFactory.createCurrencyFormatter(),
-      documentFormatter: FormatterFactory.createDocumentFormatter(),
-      dateFormatter: FormatterFactory.createDateFormatter(),
-      CEPFormatter: FormatterFactory.createCEPFormatter()
+      formatter: new FormatterFacade()
     };
   },
   watch: {
@@ -521,36 +518,6 @@ export default {
     closeModal() {
       this.$emit('close');
     },
-    // Removida a função isJsonObject pois informacoes_adicionais agora é sempre um objeto
-    formatDate(dateString: string | null) {
-      if (!dateString) return 'N/A';
-      try {
-        return this.dateFormatter.format(dateString);
-      } catch {
-        return dateString;
-      }
-    },
-    formatCurrency(value: string | number | null) {
-      return this.currencyFormatter.format(value);
-    },
-    formatDocument(document: string | null | undefined) {
-      return this.documentFormatter.format(document);
-    },
-    formatCEP(cep: string | null | undefined) {
-      return this.CEPFormatter.format(cep);
-    },
-    formatModalidadeFrete(modalidade: number | null) {
-      if (modalidade === null || modalidade === undefined) return 'N/A';
-      switch (modalidade) {
-        case 0: return 'Por conta do emitente';
-        case 1: return 'Por conta do destinatário/remetente';
-        case 2: return 'Por conta de terceiros';
-        case 3: return 'Próprio emitente';
-        case 4: return 'Por conta do Remetente'; // Nova modalidade conforme NT 2020.006
-        case 9: return 'Sem frete';
-        default: return 'Desconhecido';
-      }
-    }
   }
 };
 </script>
