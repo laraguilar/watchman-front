@@ -218,9 +218,15 @@ const transformFile = async () => {
         </button>
         <button type="button"
                 @click="transformFile"
-                class="mt-4 bg-green-600 p-2 px-6 rounded-lg text-white font-bold
-                       hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-          Transformar
+                :disabled="!xmlFile"
+                :class="{
+                  'bg-green-600 hover:bg-green-700 focus:ring-green-500 dark:bg-green-700 dark:hover:bg-green-600 cursor-pointer': xmlFile,
+                  'bg-gray-400 cursor-not-allowed dark:bg-gray-600': !xmlFile
+                }"
+                class="w-full py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white
+                       focus:outline-none focus:ring-2 focus:ring-offset-2
+                       dark:focus:ring-offset-gray-800 transition-colors duration-200">
+          Transformar para DANFE
         </button>
       </form>
       <div v-if="uploadMessage"
