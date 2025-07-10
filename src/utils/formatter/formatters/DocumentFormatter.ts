@@ -11,6 +11,6 @@ export class DocumentFormatter implements Formatter {
     if (cleaned.length === 11) {
       return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
     }
-    return document
+    return String(document)
   }
 }
