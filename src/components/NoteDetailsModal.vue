@@ -314,7 +314,7 @@
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-500">CNPJ/CPF</label>
-                    <span class="text-sm text-gray-800 font-mono">{{ formatter.formatDocument(note.transporte.transportadora.cnpj || note.transporte.transportadora.cpf) }}</span>
+                    <span class="text-sm text-gray-800 font-mono">{{ formatter.formatDocument(note.transporte.transportadora?.cnpj || note.transporte.transportadora?.cpf) }}</span>
                   </div>
                 </div>
 
