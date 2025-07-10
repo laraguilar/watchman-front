@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ApiNotaFiscalService } from '@/services/NotaFiscalService';
+import { ApiNotaFiscalService } from '@/services/NotaFiscal/NotaFiscalService';
 import { transformXmlToDanfe } from '@/services/xmlToDanfeService';
 
 // Ref para armazenar o arquivo XML selecionado
