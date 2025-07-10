@@ -193,7 +193,7 @@ export interface NotaFiscal {
   versao_processo: string
 }
 
-export interface NotaFiscalItem {
+export interface NotaFiscalListItem {
   chave_acesso: string
   data_emissao: string
   destinatario_nome: string
@@ -204,13 +204,13 @@ export interface NotaFiscalItem {
   serie: number
 }
 
-export interface NotaFiscalRepository {
+export interface NotaFiscalService {
   upload(file: File): Promise<UploadResponse>
-  getAll(): Promise<NotaFiscalItem[]>
+  getAll(): Promise<NotaFiscalListItem[]>
   getById(chaveAcesso: string): Promise<NotaFiscal>
 }
 
-export class ApiNotaFiscalRepository implements NotaFiscalRepository {
+export class ApiNotaFiscalService implements NotaFiscalService {
   private readonly baseUrl = 'http://localhost:8000/api'
 
   async upload(file: File): Promise<UploadResponse> {
@@ -229,7 +229,7 @@ export class ApiNotaFiscalRepository implements NotaFiscalRepository {
     return response.json()
   }
 
-  async getAll(): Promise<NotaFiscalItem[]> {
+  async getAll(): Promise<NotaFiscalListItem[]> {
     const response = await fetch(`${this.baseUrl}/notas-fiscais`)
     return response.json()
   }

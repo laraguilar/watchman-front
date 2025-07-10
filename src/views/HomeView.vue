@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ApiNotaFiscalRepository } from '@/repositories/NotaFiscalRepository';
+import { ApiNotaFiscalService } from '@/services/NotaFiscalService';
 import { transformXmlToDanfe } from '@/services/xmlToDanfeService';
 
 // Ref para armazenar o arquivo XML selecionado
@@ -72,7 +72,7 @@ const submitFile = async () => {
 
   try {
     // const responseData = await uploadInvoiceFile(xmlFile.value);
-    const repository = new ApiNotaFiscalRepository();
+    const repository = new ApiNotaFiscalService();
     const responseData = await repository.upload(xmlFile.value);
 
     uploadMessage.value = responseData.message || 'Arquivo enviado com sucesso!'
@@ -118,7 +118,7 @@ const transformFile = async () => {
     // uploadMessage.value = responseData.message || 'Arquivo transformado com sucesso!'
     uploadSuccess.value = true
     console.log('Resposta da API:', responseData)
-    
+
     xmlFile.value = null
   } catch (error) {
     let errorMessage = 'Erro desconhecido ao processar requisição.';

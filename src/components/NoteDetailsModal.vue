@@ -462,7 +462,7 @@
 </template>
 
 <script lang="ts">
-import { ApiNotaFiscalRepository, type NotaFiscal } from '@/repositories/NotaFiscalRepository';
+import { ApiNotaFiscalService, type NotaFiscal } from '@/services/NotaFiscalService';
 import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
 
 export default {
@@ -506,7 +506,7 @@ export default {
       this.error = null;
       this.note = null;
       try {
-        const repository = new ApiNotaFiscalRepository();
+        const repository = new ApiNotaFiscalService();
         this.note = await repository.getById(chaveAcesso);
       } catch (err) {
         console.error("Erro ao buscar detalhes da nota fiscal:", err);

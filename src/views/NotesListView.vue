@@ -53,7 +53,7 @@
 import { defineComponent } from 'vue';
 import NoteDetailsModal from '@/components/NoteDetailsModal.vue';
 import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
-import { ApiNotaFiscalRepository, type NotaFiscalItem } from '@/repositories/NotaFiscalRepository';
+import { ApiNotaFiscalService, type NotaFiscalItem } from '@/services/NotaFiscalService';
 
 export default defineComponent({
   name: 'NotesListView',
@@ -75,7 +75,7 @@ export default defineComponent({
       this.loading = true;
       this.error = null;
       try {
-        const repository = new ApiNotaFiscalRepository();
+        const repository = new ApiNotaFiscalService();
         this.notes = await repository.getAll();
       } catch (err) {
         console.error("Erro ao buscar notas fiscais:", err);
