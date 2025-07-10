@@ -12,7 +12,7 @@
        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
-      Erro ao carregar notas: {{ error.message }}
+      Erro ao carregar notas: {{ error instanceof Error ? error.message : error }}
     </div>
     <div v-else class="overflow-x-auto">
       <table class="w-full border-collapse mt-5 bg-white rounded-md overflow-hidden shadow">
@@ -31,10 +31,10 @@
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.numero }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.serie }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.chave_acesso }}</td>
-            <td class="border border-gray-200 py-3 px-4 text-left">{{ note.data_emissao }}</td>
+            <td class="border border-gray-200 py-3 px-4 text-left">{{ formatter.formatDate(note.data_emissao) }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">{{ note.natureza_operacao }}</td>
             <td class="border border-gray-200 py-3 px-4 text-left">
-              <button @click="openModal(note.id)" class="bg-blue-500 text-white border-none py-2 px-4 rounded cursor-pointer text-sm transition-colors duration-200 ease-in-out transform hover:bg-blue-700 hover:-translate-y-px active:bg-blue-800 active:translate-y-0">Visualizar</button>
+              <button @click="openModal(note.chave_acesso)" class="bg-blue-500 text-white border-none py-2 px-4 rounded cursor-pointer text-sm transition-colors duration-200 ease-in-out transform hover:bg-blue-700 hover:-translate-y-px active:bg-blue-800 active:translate-y-0">Visualizar</button>
             </td>
           </tr>
         </tbody>
@@ -43,29 +43,31 @@
 
     <NoteDetailsModal
       :isVisible="isModalOpen"
-      :chaveAcesso="selectedChaveAcesso"
+      :chaveAcesso="selectedChaveAcesso || undefined"
       @close="closeModal"
     />
   </div>
 </template>
 
 <script lang="ts">
-// ... seu script Vue (sem alterações aqui, já que são apenas estilos)
+import { defineComponent } from 'vue';
 import NoteDetailsModal from '@/components/NoteDetailsModal.vue';
-import axios from 'axios';
+import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
+import { ApiNotaFiscalService, type NotaFiscalItem } from '@/services/NotaFiscalService';
 
-export default {
+export default defineComponent({
   name: 'NotesListView',
   components: {
     NoteDetailsModal
   },
   data() {
     return {
-      notes: [],
+      notes: [] as NotaFiscalItem[],
       isModalOpen: false,
-      selectedChaveAcesso: null,
+      selectedChaveAcesso: null as string | null,
       loading: true,
-      error: null
+      error: null as Error | string | null,
+      formatter: new FormatterFacade(),
     };
   },
   methods: {
@@ -73,16 +75,16 @@ export default {
       this.loading = true;
       this.error = null;
       try {
-        const response = await axios.get('http://localhost:8000/api/notas-fiscais');
-        this.notes = response.data;
+        const repository = new ApiNotaFiscalService();
+        this.notes = await repository.getAll();
       } catch (err) {
         console.error("Erro ao buscar notas fiscais:", err);
-        this.error = err;
+        this.error = err instanceof Error ? err : 'Erro desconhecido';
       } finally {
         this.loading = false;
       }
     },
-    openModal(chaveAcesso) {
+    openModal(chaveAcesso: string) {
       this.selectedChaveAcesso = chaveAcesso;
       this.isModalOpen = true;
     },
@@ -94,7 +96,7 @@ export default {
   created() {
     this.fetchNotes();
   }
-};
+});
 </script>
 
 <style scoped>

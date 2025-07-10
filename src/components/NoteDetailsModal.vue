@@ -58,7 +58,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data de Emissão</label>
-                <span class="text-base text-gray-800 font-medium">{{ formatDate(note.data_emissao) }}</span>
+                <span class="text-base text-gray-800 font-medium">{{ formatter.formatDate(note.data_emissao) }}</span>
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Natureza da Operação</label>
@@ -95,7 +95,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data Saída/Entrada</label>
-                <span class="text-base text-gray-800 font-medium">{{ note.data_saida_entrada ? formatDate(note.data_saida_entrada) : 'N/A' }}</span>
+                <span class="text-base text-gray-800 font-medium">{{ note.data_saida_entrada ? formatter.formatDate(note.data_saida_entrada) : 'N/A' }}</span>
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Dígito Verificador</label>
@@ -183,7 +183,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">CNPJ/CPF</label>
-                <span class="text-base text-gray-800 font-medium font-mono">{{ formatDocument(note.emitente.cnpj || note.emitente.cpf) }}</span>
+                <span class="text-base text-gray-800 font-medium font-mono">{{ formatter.formatDocument(note.emitente.cnpj || note.emitente.cpf) }}</span>
               </div>
               <div v-if="note.emitente_endereco" class="col-span-full">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3 block">Endereço</label>
@@ -203,7 +203,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                       <label class="text-xs font-medium text-gray-500">CEP</label>
-                      <span class="text-sm text-gray-800 font-mono">{{ formatCEP(note.emitente_endereco.cep) }}</span>
+                      <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCEP(note.emitente_endereco.cep) }}</span>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">CNPJ/CPF</label>
-                <span class="text-base text-gray-800 font-medium font-mono">{{ formatDocument(note.destinatario.cnpj || note.destinatario.cpf) }}</span>
+                <span class="text-base text-gray-800 font-medium font-mono">{{ formatter.formatDocument(note.destinatario.cnpj || note.destinatario.cpf) }}</span>
               </div>
               <div v-if="note.destinatario_endereco" class="col-span-full">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3 block">Endereço</label>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                       <label class="text-xs font-medium text-gray-500">CEP</label>
-                      <span class="text-sm text-gray-800 font-mono">{{ formatCEP(note.destinatario_endereco.cep) }}</span>
+                      <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCEP(note.destinatario_endereco.cep) }}</span>
                     </div>
                   </div>
                 </div>
@@ -264,26 +264,26 @@
               <div class="bg-white rounded-xl p-6 border-2 border-green-500 shadow-lg shadow-green-500/10">
                 <div class="flex justify-between items-center">
                   <label class="text-lg font-semibold text-green-800">Valor Total da NF-e</label>
-                  <span class="text-3xl font-bold text-green-600 font-mono">{{ formatCurrency(note.totais.valor_total_nfe) }}</span>
+                  <span class="text-3xl font-bold text-green-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_total_nfe) }}</span>
                 </div>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="bg-white rounded-xl p-5 border-2 border-blue-300 shadow-md">
                   <div class="flex justify-between items-center">
                     <label class="text-base font-semibold text-blue-800">Valor Total dos Produtos</label>
-                    <span class="text-xl font-bold text-blue-600 font-mono">{{ formatCurrency(note.totais.valor_produtos) }}</span>
+                    <span class="text-xl font-bold text-blue-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_produtos) }}</span>
                   </div>
                 </div>
                 <div class="bg-white rounded-xl p-5 border-2 border-orange-300 shadow-md">
                   <div class="flex justify-between items-center">
                     <label class="text-base font-semibold text-orange-800">Valor Total dos Impostos</label>
-                    <span class="text-xl font-bold text-orange-600 font-mono">{{ formatCurrency(note.totais.valor_icms + note.totais.valor_cofins + note.totais.valor_pis) }}</span>
+                    <span class="text-xl font-bold text-orange-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_icms + note.totais.valor_cofins + note.totais.valor_pis) }}</span>
                   </div>
                 </div>
                 <div class="bg-white rounded-xl p-5 border-2 border-red-300 shadow-md">
                   <div class="flex justify-between items-center">
                     <label class="text-base font-semibold text-red-800">Valor Total dos Descontos</label>
-                    <span class="text-xl font-bold text-red-600 font-mono">{{ formatCurrency(note.totais.valor_desconto) }}</span>
+                    <span class="text-xl font-bold text-red-600 font-mono">{{ formatter.formatCurrency(note.totais.valor_desconto) }}</span>
                   </div>
                 </div>
               </div>
@@ -301,7 +301,7 @@
               <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
                 <div class="flex flex-col gap-1.5">
                   <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Modalidade Frete</label>
-                  <span class="text-base text-gray-800 font-medium">{{ formatModalidadeFrete(note.transporte.modalidade_frete) || 'N/A' }}</span>
+                  <span class="text-base text-gray-800 font-medium">{{ formatter.formatModalidadeFrete(note.transporte.modalidade_frete) || 'N/A' }}</span>
                 </div>
               </div>
 
@@ -314,7 +314,7 @@
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-500">CNPJ/CPF</label>
-                    <span class="text-sm text-gray-800 font-mono">{{ formatDocument(note.transporte.transportadora.documento) }}</span>
+                    <span class="text-sm text-gray-800 font-mono">{{ formatter.formatDocument(note.transporte.transportadora?.cnpj || note.transporte.transportadora?.cpf) }}</span>
                   </div>
                 </div>
 
@@ -407,7 +407,7 @@
                 <div class="bg-slate-50 px-5 py-4 border-b border-gray-300">
                   <div class="flex justify-between items-center">
                     <span class="font-semibold text-gray-700 text-sm">Item {{ item.numero_item }}</span>
-                    <span class="text-lg font-bold text-indigo-600 font-mono">{{ formatCurrency(item.valor_total_bruto) }}</span>
+                    <span class="text-lg font-bold text-indigo-600 font-mono">{{ formatter.formatCurrency(item.valor_total_bruto) }}</span>
                   </div>
                 </div>
                 <div class="px-5 py-4">
@@ -426,7 +426,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                       <label class="text-xs font-medium text-gray-500">Valor Unitário</label>
-                      <span class="text-sm text-gray-800 font-mono">{{ formatCurrency(item.valor_unitario_comercial) }}</span>
+                      <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCurrency(item.valor_unitario_comercial) }}</span>
                     </div>
                   </div>
 
@@ -436,7 +436,7 @@
                       <div v-for="imposto in item.impostos" :key="imposto.id" class="bg-slate-50 p-3 rounded-lg border border-gray-200">
                         <div class="text-xs font-medium text-gray-500 mb-1">{{ imposto.tipo_imposto }}</div>
                         <div class="flex justify-between items-center">
-                          <span class="text-sm text-gray-800 font-mono">{{ formatCurrency(imposto.valor) }}</span>
+                          <span class="text-sm text-gray-800 font-mono">{{ formatter.formatCurrency(imposto.valor) }}</span>
                           <span v-if="imposto.aliquota_percentual" class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-md">{{ imposto.aliquota_percentual }}%</span>
                           <span v-else class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-md">N/A</span>
                         </div>
@@ -462,199 +462,8 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
-
-// --- Interfaces Atualizadas ---
-
-interface Pessoa {
-  id: number;
-  nome: string;
-  documento?: string; // Pode ser CPF ou CNPJ
-  cnpj?: string;
-  cpf?: string;
-  cnae?: string | null;
-  data_atualizacao: string;
-  data_criacao: string;
-  email?: string | null;
-  id_estrangeiro?: string | null;
-  inscricao_estadual?: string | null;
-  inscricao_municipal?: string | null;
-  inscricao_suframa?: string | null;
-  nome_fantasia?: string | null;
-  regime_tributario?: number | null;
-  tipo_pessoa: string;
-}
-
-interface Endereco {
-  id: number;
-  logradouro: string;
-  numero: string;
-  bairro: string;
-  codigo_municipio: string; // Pode ser string
-  municipio: string;
-  uf: string;
-  cep: string;
-  cnpj?: string | null;
-  cpf?: string | null;
-  codigo_pais?: string | null;
-  complemento?: string | null;
-  data_atualizacao: string;
-  data_criacao: string;
-  nfe_id?: number | null;
-  pais?: string | null;
-  pessoa_id?: number;
-  telefone?: string | null;
-  tipo_endereco: string;
-}
-
-interface Imposto {
-  id: number;
-  tipo_imposto: string;
-  valor: number | null; // Pode ser null
-  aliquota_percentual: number | null; // Alíquota agora é percentual e pode ser null
-  aliquota_st?: number | null;
-  aliquota_valor?: number | null;
-  classe_enquadramento?: string | null;
-  cnpj_produtor?: string | null;
-  codigo_enquadramento?: string | null;
-  codigo_selo?: string | null;
-  csosn?: string | null;
-  cst?: string | null;
-  data_atualizacao: string;
-  data_criacao: string;
-  item_nfe_id: number;
-  modalidade_base_calculo?: number | null;
-  modalidade_base_calculo_st?: number | null;
-  origem?: number | null;
-  percentual_credito_sn?: number | null;
-  percentual_margem_valor_adicionado_st?: number | null;
-  percentual_reducao_base_calculo?: number | null;
-  percentual_reducao_base_calculo_st?: number | null;
-  quantidade_selo?: number | null;
-  quantidade_unidade?: number | null;
-  tipo_calculo?: string | null;
-  valor_base_calculo?: number | null;
-  valor_base_calculo_st?: number | null;
-  valor_credito_sn?: number | null;
-  valor_st?: number | null;
-  valor_unidade?: number | null;
-}
-
-interface Item {
-  id: number;
-  numero_item: number;
-  codigo_produto: string;
-  descricao: string;
-  quantidade_comercial: number; // Nova propriedade
-  valor_unitario_comercial: number; // Nova propriedade
-  valor_total_bruto: number; // Nova propriedade, substitui valor_total
-  impostos?: Imposto[];
-  cfop: string;
-  data_atualizacao: string;
-  data_criacao: string;
-  gtin: string;
-  gtin_tributavel: string;
-  ncm: string;
-  nfe_id: number;
-  origem_mercadoria: number;
-  quantidade_tributavel: number;
-  unidade_comercial: string;
-  unidade_tributavel: string;
-  valor_unitario_tributavel: number;
-}
-
-interface Totais {
-  id: number;
-  nfe_id: number;
-  valor_produtos: number; // Substitui valor_total_produtos
-  valor_icms: number; // Impostos detalhados
-  valor_cofins: number;
-  valor_pis: number;
-  valor_total_nfe: number;
-  base_calculo_icms: number;
-  base_calculo_icms_st: number;
-  data_atualizacao: string;
-  data_criacao: string;
-  valor_desconto: number;
-  valor_frete: number;
-  valor_icms_st: number;
-  valor_ii: number;
-  valor_ipi: number;
-  valor_outros: number;
-  valor_seguro: number;
-}
-
-interface Lacre {
-  numero_lacre: string;
-}
-
-interface Volume {
-  quantidade: number;
-  especie: string;
-  peso_liquido: number;
-  peso_bruto: number;
-  lacres?: Lacre[];
-}
-
-interface Veiculo {
-  placa: string;
-  uf: string;
-  rntc: string | null;
-}
-
-interface Transporte {
-  id: number;
-  nfe_id: number;
-  modalidade_frete: number; // Agora é um número
-  transportadora?: Pessoa;
-  transportadora_endereco?: Endereco;
-  volumes?: Volume[];
-  veiculos?: Veiculo[];
-  data_atualizacao: string;
-  data_criacao: string;
-  transportadora_id: number | null;
-}
-
-interface InformacoesAdicionais {
-  id: number;
-  nfe_id: number;
-  info_fisco: string | null; // Mudou de informacoes_fisco para info_fisco
-  info_contribuinte: string | null; // Mudou de informacoes_contribuinte para info_contribuinte
-  data_atualizacao: string;
-  data_criacao: string;
-}
-
-interface NotaFiscal {
-  id: number;
-  chave_acesso: string;
-  versao: string;
-  codigo_uf: number;
-  codigo_nf: string;
-  natureza_operacao: string;
-  indicador_pagamento: number;
-  modelo: number; // Agora é um número
-  serie: number; // Agora é um número
-  numero: number; // Agora é um número
-  data_emissao: string;
-  data_saida_entrada: string | null;
-  tipo_nf: number; // Agora é um número
-  codigo_municipio_fato_gerador: string; // Pode ser string
-  tipo_impressao: number; // Agora é um número
-  tipo_emissao: number; // Agora é um número
-  digito_verificador: number; // Agora é um número
-  ambiente: number; // Agora é um número
-  finalidade_nf: number; // Agora é um número
-  processo_emissao: number; // Agora é um número
-  versao_processo: string;
-  emitente?: Pessoa;
-  emitente_endereco?: Endereco;
-  destinatario?: Pessoa;
-  destinatario_endereco?: Endereco;
-  itens?: Item[];
-  totais?: Totais;
-  transporte?: Transporte;
-  informacoes_adicionais?: InformacoesAdicionais;
-}
+import { ApiNotaFiscalService, type NotaFiscal } from '@/services/NotaFiscalService';
+import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
 
 export default {
   name: 'NoteDetailsModal',
@@ -672,7 +481,8 @@ export default {
     return {
       note: null as NotaFiscal | null,
       loading: false,
-      error: null as Error | null
+      error: null as Error | null,
+      formatter: new FormatterFacade()
     };
   },
   watch: {
@@ -696,9 +506,8 @@ export default {
       this.error = null;
       this.note = null;
       try {
-        const response = await axios.get(`http://localhost:8000/api/nota-fiscal/${chaveAcesso}`);
-        console.log(response.data)
-        this.note = response.data;
+        const repository = new ApiNotaFiscalService();
+        this.note = await repository.getById(chaveAcesso);
       } catch (err) {
         console.error("Erro ao buscar detalhes da nota fiscal:", err);
         this.error = err as Error;
@@ -709,88 +518,6 @@ export default {
     closeModal() {
       this.$emit('close');
     },
-    // Removida a função isJsonObject pois informacoes_adicionais agora é sempre um objeto
-    formatDate(dateString: string | null) {
-      if (!dateString) return 'N/A';
-      try {
-        const date = new Date(dateString);
-        // Considerando o fuso horário local, que é GMT-3 em Serra/ES
-        // Para garantir que a data seja formatada corretamente sem ajuste de fuso horário indesejado,
-        // é melhor construir a data manualmente ou garantir que a string ISO esteja no UTC correto.
-        // Já que a data_emissao é 'YYYY-MM-DD', a conversão direta para Date pode resultar em um dia anterior se for considerado UTC.
-        // Para exibir a data como ela vem, podemos usar um split e reconstruir.
-
-        const parts = dateString.split('-');
-        const year = parseInt(parts[0]);
-        const month = parseInt(parts[1]) - 1; // Mês é zero-indexed
-        const day = parseInt(parts[2]);
-
-        const localDate = new Date(year, month, day);
-
-        return localDate.toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        });
-      } catch {
-        return dateString;
-      }
-    },
-    formatCurrency(value: string | number | null) {
-      if (value === null || value === undefined) return 'N/A';
-      try {
-        const numValue = typeof value === 'string' ? parseFloat(value) : value;
-        return new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(numValue);
-      } catch {
-        return value;
-      }
-    },
-    formatDocument(document: string | null | undefined) {
-      if (!document) return 'N/A';
-
-      // Remove caracteres não numéricos
-      const cleaned = String(document).replace(/\D/g, '');
-
-      // Formata CNPJ (14 dígitos)
-      if (cleaned.length === 14) {
-        return cleaned.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-      }
-
-      // Formata CPF (11 dígitos)
-      if (cleaned.length === 11) {
-        return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-      }
-
-      return document;
-    },
-    formatCEP(cep: string | null | undefined) {
-      if (!cep) return 'N/A';
-
-      // Remove caracteres não numéricos
-      const cleaned = String(cep).replace(/\D/g, '');
-
-      // Formata CEP (8 dígitos)
-      if (cleaned.length === 8) {
-        return cleaned.replace(/(\d{5})(\d{3})/, '$1-$2');
-      }
-
-      return cep;
-    },
-    formatModalidadeFrete(modalidade: number | null) {
-      if (modalidade === null || modalidade === undefined) return 'N/A';
-      switch (modalidade) {
-        case 0: return 'Por conta do emitente';
-        case 1: return 'Por conta do destinatário/remetente';
-        case 2: return 'Por conta de terceiros';
-        case 3: return 'Próprio emitente';
-        case 4: return 'Por conta do Remetente'; // Nova modalidade conforme NT 2020.006
-        case 9: return 'Sem frete';
-        default: return 'Desconhecido';
-      }
-    }
   }
 };
 </script>
