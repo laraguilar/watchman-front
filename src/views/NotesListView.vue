@@ -53,7 +53,8 @@
 import { defineComponent } from 'vue';
 import NoteDetailsModal from '@/components/NoteDetailsModal.vue';
 import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
-import { ApiNotaFiscalService, type NotaFiscalItem } from '@/services/NotaFiscal/NotaFiscalService';
+import { ApiNotaFiscalService } from '@/services/NotaFiscal/NotaFiscalService';
+import type { NotaFiscalListItem } from '@/services/NotaFiscal/interfaces';
 
 export default defineComponent({
   name: 'NotesListView',
@@ -62,7 +63,7 @@ export default defineComponent({
   },
   data() {
     return {
-      notes: [] as NotaFiscalItem[],
+      notes: [] as NotaFiscalListItem[],
       isModalOpen: false,
       selectedChaveAcesso: null as string | null,
       loading: true,

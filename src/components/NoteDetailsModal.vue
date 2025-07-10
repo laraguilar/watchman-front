@@ -462,7 +462,8 @@
 </template>
 
 <script lang="ts">
-import { ApiNotaFiscalService, type NotaFiscal } from '@/services/NotaFiscal/NotaFiscalService';
+import type { NotaFiscal } from '@/services/NotaFiscal/interfaces';
+import { ApiNotaFiscalService } from '@/services/NotaFiscal/NotaFiscalService';
 import { FormatterFacade } from '@/utils/formatter/facades/FormatterFacade';
 
 export default {
