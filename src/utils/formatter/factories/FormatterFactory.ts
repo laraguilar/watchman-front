@@ -2,9 +2,11 @@ import { CEPFormatter } from '../formatters/CEPFormatter'
 import { CurrencyFormatter } from '../formatters/CurrencyFormatter'
 import { DateFormatter } from '../formatters/DateFormatter'
 import { DocumentFormatter } from '../formatters/DocumentFormatter'
+import {
+  FreteModalidadeFormatter,
+  type FreteFormatter,
+} from '../formatters/FreteModalidadeFormatter'
 import type { Formatter } from '../interfaces/Formatter'
-import type { FreteStrategy } from '../interfaces/FreteStrategy'
-import { FreteModalidadeStrategy } from '../strategies/FreteModalidadeStrategy'
 
 export class FormatterFactory {
   static createCurrencyFormatter(): Formatter {
@@ -23,7 +25,7 @@ export class FormatterFactory {
     return new CEPFormatter()
   }
 
-  static createFreteFormatter(): FreteStrategy {
-    return new FreteModalidadeStrategy()
+  static createFreteFormatter(): FreteFormatter {
+    return new FreteModalidadeFormatter()
   }
 }
